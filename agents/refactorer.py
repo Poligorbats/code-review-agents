@@ -49,7 +49,7 @@ class RefactorerAgent:
 
     def run(self, code: str, critique: str) -> dict:
         """Generate refactored code based on critique."""
-        print(f"[Refactorer] Generating improved code with {self.model}...")
+        print(f"[Рефактор] Генерация улучшенного кода с {self.model}...")
 
         response = self.chain.invoke({
             "code": code,
@@ -83,4 +83,4 @@ class RefactorerAgent:
         """Extract the Changes Made section."""
         if "## Changes Made" in response:
             return response.split("## Changes Made", 1)[1].strip()
-        return "See refactored code above."
+        return "См. рефакторированный код выше."

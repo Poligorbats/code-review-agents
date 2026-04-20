@@ -75,10 +75,10 @@ def main():
         sys.exit(1)
 
     if not code.strip():
-        print("Error: empty code provided", file=sys.stderr)
+        print("Ошибка: предоставлен пустой код", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Code Review & Refactoring Multi-Agent System")
+    print(f"Многоагентная система анализа и рефакторинга кода")
     print(f"Analyzer:   {os.getenv('ANALYZER_MODEL', 'codellama:7b')}")
     print(f"Critic:     {os.getenv('CRITIC_MODEL', 'codellama:7b')}")
     print(f"Refactorer: {os.getenv('REFACTORER_MODEL', 'codellama:7b')}")
@@ -106,7 +106,7 @@ def main():
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(output)
-        print(f"\nReport saved to: {args.output}")
+        print(f"\nОтчёт сохранён в: {args.output}")
     else:
         print(output)
 
@@ -129,9 +129,9 @@ def main():
 
             with open(code_path, "w", encoding="utf-8") as f:
                 f.write(refactored_code)
-            print(f"Refactored code saved to: {code_path}")
+            print(f"Рефакторированный код сохранён в: {code_path}")
         else:
-            print("Warning: refactored code is empty, nothing saved.", file=sys.stderr)
+            print("Предупреждение: рефакторированный код пуст, ничего не сохранено.", file=sys.stderr)
 
     sys.exit(0 if result.success else 1)
 

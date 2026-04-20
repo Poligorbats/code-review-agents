@@ -63,7 +63,7 @@ class CriticAgent:
 
     def run(self, code: str, analysis: str) -> dict:
         """Prioritize issues using CoT reasoning."""
-        print(f"[Critic] Evaluating issues with {self.model}...")
+        print(f"[Критик] Оценка проблем с {self.model}...")
 
         # Fetch relevant documentation
         # Extract key topics from analysis for doc search

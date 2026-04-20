@@ -55,7 +55,7 @@ class AnalyzerAgent:
 
     def run(self, code: str) -> dict:
         """Run static analysis + LLM analysis on the provided code."""
-        print(f"[Analyzer] Running static analysis with {self.model}...")
+        print(f"[Анализатор] Запуск статического анализа с {self.model}...")
 
         # Step 1: static tools
         static_results = self.static_tool.run(code)

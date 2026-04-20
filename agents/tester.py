@@ -48,7 +48,7 @@ class TesterAgent:
 
     def run(self, original_code: str, refactored_code: str) -> dict:
         """Generate tests and execute them against refactored code."""
-        print(f"[Tester] Generating tests with {self.model}...")
+        print(f"[Тестировщик] Генерация тестов с {self.model}...")
 
         # Generate tests
         response = self.chain.invoke({"code": refactored_code})
@@ -58,7 +58,7 @@ class TesterAgent:
         full_code = self._prepare_execution_code(refactored_code, test_code)
 
         # Run tests
-        print("[Tester] Running generated tests...")
+        print("[Тестировщик] Запуск сгенерированных тестов...")
         execution_result = json.loads(self.executor.run(full_code))
 
         # Parse test results
@@ -92,10 +92,10 @@ class TesterAgent:
         combined = f"""
 {refactored_code}
 
-# ---- TESTS ----
+# ---- ТЕСТЫ ----
 {test_code}
 
-# Run all test functions
+# Запуск всех тестовых функций
 import traceback
 passed = 0
 failed = 0
@@ -104,23 +104,23 @@ for name in test_funcs:
     func = eval(name)
     try:
         func()
-        print(f"PASSED: {{name}}")
+        print(f"ПРОЙДЕН: {{name}}")
         passed += 1
     except Exception as e:
-        print(f"FAILED: {{name}} — {{e}}")
+        print(f"ПРОВАЛЕН: {{name}} — {{e}}")
         failed += 1
 
-print(f"\\nResults: {{passed}} passed, {{failed}} failed")
+print(f"\\nРезультаты: {{passed}} пройдено, {{failed}} провалено")
 """
         return combined
 
     def _parse_test_results(self, execution_result: dict) -> tuple[int, int, list]:
         """Parse test output to count passed/failed."""
         stdout = execution_result.get("stdout", "")
-        passed = stdout.count("PASSED:")
-        failed = stdout.count("FAILED:")
+        passed = stdout.count("ПРОЙДЕН:")
+        failed = stdout.count("ПРОВАЛЕН:")
         errors = [
             line for line in stdout.split("\n")
-            if line.startswith("FAILED:")
+            if line.startswith("ПРОВАЛЕН:")
         ]
         return passed, failed, errors

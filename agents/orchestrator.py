@@ -26,50 +26,50 @@ class PipelineResult:
         """Format pipeline result as a human-readable report."""
         lines = []
         lines.append("=" * 60)
-        lines.append("CODE REVIEW & REFACTORING REPORT")
+        lines.append("ОТЧЁТ О ПРОВЕРКЕ И РЕФАКТОРИНГЕ КОДА")
         lines.append("=" * 60)
 
         if self.error:
-            lines.append(f"\nERROR: {self.error}")
+            lines.append(f"\nОШИБКА: {self.error}")
             return "\n".join(lines)
 
         # Analysis section
-        lines.append("\n## ANALYSIS")
-        lines.append(self.analysis.get("analysis", "N/A"))
+        lines.append("\n## АНАЛИЗ")
+        lines.append(self.analysis.get("analysis", "Н/Д"))
 
         # Critique section
-        lines.append("\n## CRITIQUE & PRIORITIES")
-        lines.append(self.critique.get("critique", "N/A"))
+        lines.append("\n## КРИТИКА И ПРИОРИТЕТЫ")
+        lines.append(self.critique.get("critique", "Н/Д"))
 
         # Refactoring section
-        lines.append("\n## REFACTORED CODE")
+        lines.append("\n## РЕФАКТОРИРОВАННЫЙ КОД")
         lines.append("```python")
-        lines.append(self.refactoring.get("refactored_code", "N/A"))
+        lines.append(self.refactoring.get("refactored_code", "Н/Д"))
         lines.append("```")
-        lines.append("\n### Changes Made")
-        lines.append(self.refactoring.get("changes_made", "N/A"))
+        lines.append("\n### Внесённые изменения")
+        lines.append(self.refactoring.get("changes_made", "Н/Д"))
 
         # Testing section
-        lines.append("\n## TEST RESULTS")
+        lines.append("\n## РЕЗУЛЬТАТЫ ТЕСТОВ")
         t = self.testing
         passed = t.get("tests_passed", 0)
         failed = t.get("tests_failed", 0)
-        lines.append(f"Tests passed: {passed} | Tests failed: {failed}")
+        lines.append(f"Тестов пройдено: {passed} | Тестов провалено: {failed}")
         if t.get("test_errors"):
-            lines.append("Failed tests:")
+            lines.append("Провалившиеся тесты:")
             for err in t["test_errors"]:
                 lines.append(f"  {err}")
-        lines.append("\nGenerated test code:")
+        lines.append("\nСгенерированный код тестов:")
         lines.append("```python")
-        lines.append(t.get("test_code", "N/A"))
+        lines.append(t.get("test_code", "Н/Д"))
         lines.append("```")
 
         # Timings
-        lines.append("\n## PERFORMANCE")
+        lines.append("\n## ПРОИЗВОДИТЕЛЬНОСТЬ")
         for agent, duration in self.timings.items():
-            lines.append(f"  {agent}: {duration:.1f}s")
+            lines.append(f"  {agent}: {duration:.1f}с")
         total = sum(self.timings.values())
-        lines.append(f"  Total: {total:.1f}s")
+        lines.append(f"  Итого: {total:.1f}с")
 
         lines.append("\n" + "=" * 60)
         return "\n".join(lines)
@@ -97,13 +97,13 @@ class Orchestrator:
 
         try:
             # Step 1: Analyzer
-            print("\n[Orchestrator] Step 1/4: Analyzing code...")
+            print("\n[Оркестратор] Шаг 1/4: Анализ кода...")
             t0 = time.time()
             result.analysis = self.analyzer.run(code)
             result.timings["analyzer"] = time.time() - t0
 
             # Step 2: Critic
-            print("\n[Orchestrator] Step 2/4: Critiquing analysis...")
+            print("\n[Оркестратор] Шаг 2/4: Критика анализа...")
             t0 = time.time()
             result.critique = self.critic.run(
                 code=code,
@@ -112,7 +112,7 @@ class Orchestrator:
             result.timings["critic"] = time.time() - t0
 
             # Step 3: Refactorer
-            print("\n[Orchestrator] Step 3/4: Refactoring code...")
+            print("\n[Оркестратор] Шаг 3/4: Рефакторинг кода...")
             t0 = time.time()
             result.refactoring = self.refactorer.run(
                 code=code,
@@ -122,7 +122,7 @@ class Orchestrator:
 
             # Step 4: Tester
             if not skip_tests:
-                print("\n[Orchestrator] Step 4/4: Generating and running tests...")
+                print("\n[Оркестратор] Шаг 4/4: Генерация и запуск тестов...")
                 t0 = time.time()
                 result.testing = self.tester.run(
                     original_code=code,
@@ -130,15 +130,15 @@ class Orchestrator:
                 )
                 result.timings["tester"] = time.time() - t0
             else:
-                print("\n[Orchestrator] Step 4/4: Skipping tests (skip_tests=True)")
+                print("\n[Оркестратор] Шаг 4/4: Пропуск тестов (skip_tests=True)")
                 result.testing = {"tests_passed": 0, "tests_failed": 0, "test_code": ""}
 
             result.success = True
-            print("\n[Orchestrator] Pipeline completed successfully!")
+            print("\n[Оркестратор] Пайплайн успешно завершён!")
 
         except Exception as e:
             result.error = str(e)
             result.success = False
-            print(f"\n[Orchestrator] Pipeline failed: {e}")
+            print(f"\n[Оркестратор] Пайплайн завершился с ошибкой: {e}")
 
         return result
